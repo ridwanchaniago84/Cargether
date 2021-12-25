@@ -22,9 +22,42 @@ class DashboardController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
-    public function user(){
-
+    public function user()
+    {
     }
+
+    public function getDataTrasaction()
+    {
+        $datesData = [];
+        $transactionsData = [];
+        $transactionPrice = [];
+
+        $dataTrasactions = Transaction::orderBy('created_at', 'ASC')
+            ->get();
+
+        foreach ($dataTrasactions as $data) {
+            if (!in_array($data->created_at->format('Y-m-d'), $datesData)) {
+                $countTrasactionThisDay = Transaction::whereDate('transactions.created_at', $data->created_at->format('Y-m-d'))
+                    ->count();
+
+                $sellingTrasactionThisDay = Transaction::whereDate('created_at', $data->created_at->format('Y-m-d'))
+                    ->sum('price');
+
+                array_push($transactionsData, $countTrasactionThisDay);
+                array_push($transactionPrice, $sellingTrasactionThisDay);
+                array_push($datesData, $data->created_at->format('Y-m-d'));
+            }
+        }
+
+        $response = [
+            'totalHargaPenjualan' => $transactionPrice,
+            'totalPenjualan' => $transactionsData,
+            'date' => $datesData
+        ];
+
+        return response()->json($response);
+    }
+
     public function index()
     {
         $members = Member::count();
@@ -36,7 +69,7 @@ class DashboardController extends Controller
             'members'               => $members,
             'vehicles'              => $vehicles,
             'transactions'          => $transactions,
-            'spendings'             => $spendings,
+            'spendings'             => $spendings
         ]);
     }
 }

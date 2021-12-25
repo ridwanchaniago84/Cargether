@@ -8,6 +8,11 @@ use App\Models\Member;
 
 class MemberController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:owner|staff');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -38,11 +38,11 @@
                                             <td>Rp. {{ number_format($compensation->price,0,',','.') }}</td>
                                             <td>
                                                 <a href="{{ route('compensations.edit', $compensation->id) }}" class="btn btn-info text-white btn-sm"> <i class="fas fa-edit"></i></a>
-                                                <form action="{{ route('compensations.destroy', $compensation->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This Compensations?')">
+                                                {{-- <form action="{{ route('compensations.destroy', $compensation->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This Compensations?')">
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
-                                                </form>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach

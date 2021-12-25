@@ -42,11 +42,13 @@
                                             <td>Rp. {{ number_format($transaction->price,0,',','.') }}</td>
                                             <td>
                                                 <a href="{{ route('transaction.edit', $transaction->id) }}" class="btn btn-info text-white btn-sm"> <i class="fas fa-edit"></i></a>
-                                                <form action="{{ route('transaction.destroy', $transaction->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This Transaction?')">
-                                                    @csrf
-                                                    @method('delete')
-                                                    <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
-                                                </form>
+                                                @hasanyrole('owner')
+                                                    <form action="{{ route('transaction.destroy', $transaction->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This Transaction?')">
+                                                        @csrf
+                                                        @method('delete')
+                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                                                    </form>
+                                                @endhasanyrole
                                             </td>
                                         </tr>
                                     @endforeach

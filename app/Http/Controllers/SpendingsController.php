@@ -4,9 +4,28 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Spending;
+use PDF;
 
 class SpendingsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:owner')->only('index', 'create', 'edit');
+        $this->middleware('role:owner|treasurer')->only('index', 'create');
+    }
+
+    public function print()
+    {
+        $spendings = Spending::all();
+        $pdf = PDF::loadView('Spendings.Print', [
+            'spendings' => $spendings,
+            'no' => 1
+        ])
+            ->setPaper('a4', 'portrait');
+
+        return $pdf->download('Data Pengeluaran.pdf');
+    }
+
     /**
      * Display a listing of the resource.
      *

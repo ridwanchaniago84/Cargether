@@ -8,6 +8,11 @@ use App\Models\Price;
 
 class VechiclesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:owner|staff');
+    }
+
     /**
      * Display a listing of the resource.
      *

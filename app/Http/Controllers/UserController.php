@@ -8,6 +8,11 @@ use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:owner');
+    }
+    
     /**
      * Display a listing of the resource.
      *

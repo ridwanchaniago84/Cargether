@@ -9,6 +9,13 @@ use App\Models\Vehicle;
 
 class TransactionController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:owner');
+        $this->middleware('role:owner|staff')->only('index', 'create', 'edit');
+        $this->middleware('role:owner|treasurer|staff')->only('index');
+    }
+
     /**
      * Display a listing of the resource.
      *

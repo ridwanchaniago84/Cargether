@@ -32,6 +32,7 @@ Auth::routes();
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/barchart', [DashboardController::class, 'getDataTrasaction'])->name('barchart');
     
     Route::resource('users', UserController::class)->parameters(['users' => 'id'])->except(['show']);
     Route::resource('members', MemberController::class)->parameters(['members' => 'id'])->except(['show']);
@@ -41,4 +42,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('compencategories', CompenCategoriesController::class)->parameters(['compenCategories' => 'id'])->except(['show']);
     Route::resource('compensations', CompensationsController::class)->parameters(['compensations' => 'id'])->except(['show']);
     Route::resource('spendings', SpendingsController::class)->parameters(['spendings' => 'id'])->except(['show']);
+
+    Route::get('spendings/print', [SpendingsController::class, 'print'])->name('print');
 });

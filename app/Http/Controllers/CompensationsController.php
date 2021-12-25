@@ -9,6 +9,12 @@ use App\Models\CompenCategory;
 
 class CompensationsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:owner|staff')->only('index', 'create', 'edit');
+        $this->middleware('role:owner|staff|treasurer')->only('index');
+    }
+    
     /**
      * Display a listing of the resource.
      *
