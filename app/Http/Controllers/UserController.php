@@ -15,11 +15,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::role(['owner', 'treasurer', 'staff'])->get();
-
+        // $users = User::role(['owner', 'treasurer', 'staff'])->get();
+        
+        $authorizedRoles = ['owner', 'treasurer', 'staff'];
+        $users = User::whereHas('roles', static function ($query) use ($authorizedRoles) {
+            return $query->whereIn('name', $authorizedRoles);
+        })->get();
+        
         return view('users.index', [
             'no'    => 1,
-            'users' => $users, 
+            'users' => $users,
         ]);
     }
 
@@ -96,11 +101,11 @@ class UserController extends Controller
             $validation = \Validator::make($request->all(), [
                 'role'     => 'required',
             ])->validate();
-    
+
             $user = User::findOrFail($id);
             $user->syncRoles($request->get('role'));
-    
-            return redirect()->route('users.index')->with('success', 'Berhasil mengubah role dari '.$user->name.'!');
+
+            return redirect()->route('users.index')->with('success', 'Berhasil mengubah role dari ' . $user->name . '!');
         }
 
         return abort(403);
@@ -118,7 +123,7 @@ class UserController extends Controller
             $user = User::findOrFail($id);
             $user->delete();
 
-            return redirect()->route('users.index')->with('success', 'Berhasil menghapus Administrator '.$user->name.'!');
+            return redirect()->route('users.index')->with('success', 'Berhasil menghapus Administrator ' . $user->name . '!');
         }
 
         return abort(403);

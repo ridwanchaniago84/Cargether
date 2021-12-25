@@ -3,16 +3,16 @@
 @section('content')
     <section class="section">
         <div class="section-header">
-            <h1>Kelola Member</h1>
+            <h1>Kelola Compen Category</h1>
         </div>
         <div class="section-body">
             <x-alert />
             <div class="row">
                 <div class="card col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="card-header">
-                        <h4>List Member</h4>
+                        <h4>List Compen Category</h4>
                         <div class="card-header-action">
-                            <a href="{{ route('members.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                            <a href="{{ route('compencategories.create') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                         </div>
                     </div>
                     <div class="card-body">
@@ -21,22 +21,20 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Email</th>
-                                        <th>Status</th>
+                                        <th>Complaint</th>
+                                        <th>Price</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($members as $member)
+                                    @foreach ($CompenCategorys as $CompenCategory)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $member->name }}</td>
-                                            <td>{{ $member->email }}</td>
-                                            <td><span class="badge {{ $member->is_active == 1 ? "badge-success" : "badge-danger"}}">{{ $member->is_active == 1 ? 'Aktif' : 'Tidak Aktif' }}</span></td>
+                                            <td>{{ $CompenCategory->complaint }}</td>
+                                            <td>{{ $CompenCategory->price }}</td>
                                             <td>
-                                                <a href="{{ route('members.edit', ['id' => $member->id]) }}" class="btn btn-info text-white btn-sm"> <i class="fas fa-edit"></i></a>
-                                                <form action="{{ route('members.destroy', ['id' => $member->id]) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This member?')">
+                                                <a href="{{ route('compencategories.edit', $CompenCategory->id) }}" class="btn btn-info text-white btn-sm"> <i class="fas fa-edit"></i></a>
+                                                <form action="{{ route('compencategories.destroy', $CompenCategory->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This Complaint Category?')">
                                                     @csrf
                                                     @method('delete')
                                                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>

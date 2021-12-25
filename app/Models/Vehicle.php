@@ -18,7 +18,7 @@ class Vehicle extends Model
         'plate_no',
         'brand',
         'brand_type',
-        'id_price',
+        'price_id',
         'is_active',
     ];
 

@@ -5,6 +5,11 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\PricesController; 
+use App\Http\Controllers\VechiclesController;
+use App\Http\Controllers\CompenCategoriesController;
+use App\Http\Controllers\CompensationsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +31,12 @@ Auth::routes();
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
     Route::resource('users', UserController::class)->parameters(['users' => 'id'])->except(['show']);
-    Route::resource('members', MemberController::class)->parameters(['members' => 'id']);
+    Route::resource('members', MemberController::class)->parameters(['members' => 'id'])->except(['show']);
+    Route::resource('transaction', TransactionController::class)->parameters(['transaction' => 'id'])->except(['show']);
+    Route::resource('prices', PricesController::class)->parameters(['price' => 'id'])->except(['show']);
+    Route::resource('vechicles', VechiclesController::class)->parameters(['vechicle' => 'id'])->except(['show']);
+    Route::resource('compencategories', CompenCategoriesController::class)->parameters(['compenCategories' => 'id'])->except(['show']);
+    Route::resource('compensations', CompensationsController::class)->parameters(['compenCategories' => 'id'])->except(['show']);
 });

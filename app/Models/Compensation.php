@@ -14,9 +14,12 @@ class Compensation extends Model
      *
      * @var string[]
      */
+
+    protected $table = 'compensations';
+
     protected $fillable = [
-        'id_transaction',
-        'id_compen_category',
+        'transaction_id',
+        'compen_category_id'
     ];
 
     public function transaction()

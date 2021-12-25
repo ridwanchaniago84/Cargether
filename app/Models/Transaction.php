@@ -15,8 +15,8 @@ class Transaction extends Model
      * @var string[]
      */
     protected $fillable = [
-        'id_member',
-        'id_vehicle',
+        'member_id',
+        'vehicle_id',
         'rent_date',
         'return_date',
         'period',
