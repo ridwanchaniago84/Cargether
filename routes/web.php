@@ -10,6 +10,7 @@ use App\Http\Controllers\PricesController;
 use App\Http\Controllers\VechiclesController;
 use App\Http\Controllers\CompenCategoriesController;
 use App\Http\Controllers\CompensationsController;
+use App\Http\Controllers\SpendingsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,5 +39,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('prices', PricesController::class)->parameters(['price' => 'id'])->except(['show']);
     Route::resource('vechicles', VechiclesController::class)->parameters(['vechicle' => 'id'])->except(['show']);
     Route::resource('compencategories', CompenCategoriesController::class)->parameters(['compenCategories' => 'id'])->except(['show']);
-    Route::resource('compensations', CompensationsController::class)->parameters(['compenCategories' => 'id'])->except(['show']);
+    Route::resource('compensations', CompensationsController::class)->parameters(['compensations' => 'id'])->except(['show']);
+    Route::resource('spendings', SpendingsController::class)->parameters(['spendings' => 'id'])->except(['show']);
 });

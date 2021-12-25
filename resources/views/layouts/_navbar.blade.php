@@ -18,8 +18,8 @@
             href="{{ route('vechicles.index') }}"><i class="fas fa-car"></i>&nbsp;<span>Kendaraan</span></a></li>
 
     <li class="menu-header">Ganti Rugi</li>
-    <li class="{{ Request::segment(1) == 'dashboard' ? 'active' : '' }}"><a class="nav-link"
-            href="{{ route('dashboard') }}"><i class="fas fa-receipt"></i>&nbsp;<span>Ganti Rugi</span></a></li>
+    <li class="{{ Request::segment(1) == 'compensations' ? 'active' : '' }}"><a class="nav-link"
+            href="{{ route('compensations.index') }}"><i class="fas fa-receipt"></i>&nbsp;<span>Ganti Rugi</span></a></li>
     @endhasanyrole
     @hasanyrole('owner|treasurer')
         <li class="menu-header">Harga</li>
@@ -29,8 +29,8 @@
         <li class="{{ Request::segment(1) == 'compencategories' ? 'active' : '' }}"><a class="nav-link"
                 href="{{ route('compencategories.index') }}"><i class="fas fa-receipt"></i>&nbsp;<span>Kategori</span></a></li>
         <li class="menu-header">Pengeluaran</li>
-        <li class="{{ Request::segment(1) == 'dashboard' ? 'active' : '' }}"><a class="nav-link"
-                href="{{ route('dashboard') }}"><i class="fas fa-money-bill-wave-alt"></i>&nbsp;<span>Kategori</span></a>
+        <li class="{{ Request::segment(1) == 'spendings' ? 'active' : '' }}"><a class="nav-link"
+                href="{{ route('spendings.index') }}"><i class="fas fa-money-bill-wave-alt"></i>&nbsp;<span>Kategori</span></a>
         </li>
     @endhasanyrole
 
