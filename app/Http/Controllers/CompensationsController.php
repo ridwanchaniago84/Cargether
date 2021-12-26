@@ -6,15 +6,15 @@ use Illuminate\Http\Request;
 use App\Models\Compensation;
 use App\Models\Transaction;
 use App\Models\CompenCategory;
+use Illuminate\Support\Facades\Auth;
 
 class CompensationsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:owner|staff')->only('index', 'create', 'edit');
-        $this->middleware('role:owner|staff|treasurer')->only('index');
+        $this->middleware('role:owner|staff|treasurer');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -48,21 +48,25 @@ class CompensationsController extends Controller
      */
     public function create()
     {
-        $transactions = Transaction::join('vehicles', 'vehicles.id', 'transactions.vehicle_id')
-            ->join('members', 'members.id', 'transactions.member_id')
-            ->select([
-                'transactions.*',
-                'vehicles.plate_no',
-                'members.name'
-            ])
-            ->get();
+        if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff')) {
+            $transactions = Transaction::join('vehicles', 'vehicles.id', 'transactions.vehicle_id')
+                ->join('members', 'members.id', 'transactions.member_id')
+                ->select([
+                    'transactions.*',
+                    'vehicles.plate_no',
+                    'members.name'
+                ])
+                ->get();
 
-        $compenCategories = CompenCategory::all();
+            $compenCategories = CompenCategory::all();
 
-        return view('Compensations.create', [
-            'transactions' => $transactions,
-            'compenCategories' => $compenCategories
-        ]);
+            return view('Compensations.create', [
+                'transactions' => $transactions,
+                'compenCategories' => $compenCategories
+            ]);
+        }
+
+        return abort(403, 'Unauthorized action.');
     }
 
     /**
@@ -105,23 +109,27 @@ class CompensationsController extends Controller
      */
     public function edit($id)
     {
-        $compensation = Compensation::findOrFail($id);
-        $transactions = Transaction::join('vehicles', 'vehicles.id', 'transactions.vehicle_id')
-            ->join('members', 'members.id', 'transactions.member_id')
-            ->select([
-                'transactions.*',
-                'vehicles.plate_no',
-                'members.name'
-            ])
-            ->get();
+        if (Auth::user()->hasRole('owner') || Auth::user()->hasRole('staff')) {
+            $compensation = Compensation::findOrFail($id);
+            $transactions = Transaction::join('vehicles', 'vehicles.id', 'transactions.vehicle_id')
+                ->join('members', 'members.id', 'transactions.member_id')
+                ->select([
+                    'transactions.*',
+                    'vehicles.plate_no',
+                    'members.name'
+                ])
+                ->get();
 
-        $compenCategories = CompenCategory::all();
+            $compenCategories = CompenCategory::all();
 
-        return view('Compensations.edit', [
-            'transactions' => $transactions,
-            'compenCategories' => $compenCategories,
-            'compensation' => $compensation
-        ]);
+            return view('Compensations.edit', [
+                'transactions' => $transactions,
+                'compenCategories' => $compenCategories,
+                'compensation' => $compensation
+            ]);
+        }
+
+        return abort(403, 'Unauthorized action.');
     }
 
     /**

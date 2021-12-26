@@ -6,15 +6,14 @@
             margin: 15;
         }
 
-        table,
-        th,
-        td {
-            border: 1px solid black;
+        table {
             border-collapse: collapse;
         }
 
         th,
         td, {
+            border: 1px solid black;
+            border-collapse: collapse;
             padding: 5px;
         }
 
@@ -41,6 +40,12 @@
                     <td>{{ $spending->date }}</td>
                 </tr>
             @endforeach
+            <tr style="border: none;">
+                <td style="border: none;"></td>
+                <td><b>Total:</b></td>
+                <td><b>Rp. {{ number_format($total, 0, ',', '.') }}</b></td>
+                <td style="border: none;"></td>
+            </tr>
         </tbody>
     </table>
 </body>

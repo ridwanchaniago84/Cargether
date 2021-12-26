@@ -12,7 +12,8 @@
                     <div class="card-header">
                         <h4>List Spending</h4>
                         <div class="card-header-action">
-                            <a href="{{ route('print') }}" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-print"></i></a>
+                            <a href="{{ route('print') }}" class="btn btn-success" data-toggle="modal"
+                                data-target="#print"><i class="fas fa-print"></i></a>
                             <a href="{{ route('spendings.create') }}" class="btn btn-primary"><i
                                     class="fas fa-plus"></i></a>
                         </div>
@@ -58,32 +59,45 @@
         </div>
     </section>
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="print" tabindex="-1" role="dialog" aria-labelledby="print"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Print</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <form action="{{ route('print') }}" method="POST">
+                    <div class="modal-body">
+                        @csrf
                         <div class="form-group">
-                            <label for="recipient-name" class="col-form-label">Recipient:</label>
-                            <input type="text" class="form-control" id="recipient-name">
+                            <label for="from" class="col-form-label">From:</label>
+                            <input type="date" class="form-control @error('from') s-invalid @enderror" id="from" name="from"
+                                value="{{ old('from') }}" required>
+                            @error('from')
+                                <div class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('from') }}</strong>
+                                </div>
+                            @enderror
                         </div>
                         <div class="form-group">
-                            <label for="message-text" class="col-form-label">Message:</label>
-                            <textarea class="form-control" id="message-text"></textarea>
+                            <label for="to" class="col-form-label">To:</label>
+                            <input type="date" class="form-control @error('to') s-invalid @enderror" id="to" name="to"
+                                value="{{ old('to') }}" required>
+                            @error('to')
+                                <div class="invalid-feedback" role="alert">
+                                    <strong>{{ $errors->first('to') }}</strong>
+                                </div>
+                            @enderror
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Send message</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Print</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

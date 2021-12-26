@@ -5,20 +5,34 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Spending;
 use PDF;
+use Illuminate\Support\Facades\Auth;
 
 class SpendingsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:owner')->only('index', 'create', 'edit');
-        $this->middleware('role:owner|treasurer')->only('index', 'create');
+        $this->middleware('role:owner|treasurer');
     }
 
-    public function print()
+    public function print(Request $request)
     {
-        $spendings = Spending::all();
+        $validation = \Validator::make($request->all(), [
+            'from' => 'required|date',
+            'to' => 'required|date|after_or_equal:from'
+        ])->validate();
+
+        $from = $request->get('from');
+        $to = $request->get('to');
+
+        $spendings = Spending::whereBetween('date', [$from.' 00:00:00', $to . ' 23:59:59'])
+            ->get();
+
+        $total = Spending::whereBetween('date', [$from.' 00:00:00', $to . ' 23:59:59'])
+            ->sum('price');
+
         $pdf = PDF::loadView('Spendings.Print', [
             'spendings' => $spendings,
+            'total' => $total,
             'no' => 1
         ])
             ->setPaper('a4', 'portrait');
@@ -93,6 +107,8 @@ class SpendingsController extends Controller
      */
     public function edit($id)
     {
+        if (!Auth::user()->hasRole('owner')) return abort(403, 'Unauthorized action.');
+
         $spending = Spending::findOrFail($id);
 
         return view('Spendings.edit', [
@@ -132,6 +148,7 @@ class SpendingsController extends Controller
      */
     public function destroy($id)
     {
+        if (!Auth::user()->hasRole('owner')) return abort(403, 'Unauthorized action.');
         try {
             $spending = Spending::findOrFail($id);
             $spending->delete();

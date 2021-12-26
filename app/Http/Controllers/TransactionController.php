@@ -6,14 +6,13 @@ use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Member;
 use App\Models\Vehicle;
+use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('role:owner');
-        $this->middleware('role:owner|staff')->only('index', 'create', 'edit');
-        $this->middleware('role:owner|treasurer|staff')->only('index');
+        $this->middleware('role:owner|treasurer|staff');
     }
 
     /**
@@ -45,6 +44,8 @@ class TransactionController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->hasRole('treasurer')) return abort(403, 'Unauthorized action.');
+
         $members = Member::where('is_active', 1)->get();
         $vehicles = Vehicle::where('is_active', 1)->get();
 
@@ -122,6 +123,8 @@ class TransactionController extends Controller
      */
     public function edit($id)
     {
+        if (Auth::user()->hasRole('treasurer')) return abort(403, 'Unauthorized action.');
+
         $transaction = Transaction::findOrFail($id);
         $members = Member::where('is_active', 1)->get();
         $vehicles = Vehicle::where('is_active', 1)->get();
@@ -185,6 +188,7 @@ class TransactionController extends Controller
      */
     public function destroy($id)
     {
+        if (!Auth::user()->hasRole('owner')) return abort(403, 'Unauthorized action.');
         try {
             $transaction = Transaction::findOrFail($id);
             $transaction->delete();
