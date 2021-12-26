@@ -42,6 +42,7 @@
                                             <td>Rp. {{ number_format($transaction->price,0,',','.') }}</td>
                                             <td>
                                                 <a href="{{ route('transaction.edit', $transaction->id) }}" class="btn btn-info text-white btn-sm"> <i class="fas fa-edit"></i></a>
+                                                <a href="{{ route('printTransaction', $transaction->id) }}" class="btn btn-success text-white btn-sm"> <i class="fas fa-print"></i></a>
                                                 @hasanyrole('owner')
                                                     <form action="{{ route('transaction.destroy', $transaction->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete This Transaction?')">
                                                         @csrf

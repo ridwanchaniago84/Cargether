@@ -7,12 +7,39 @@ use App\Models\Transaction;
 use App\Models\Member;
 use App\Models\Vehicle;
 use Illuminate\Support\Facades\Auth;
+use PDF;
 
 class TransactionController extends Controller
 {
     public function __construct()
     {
         $this->middleware('role:owner|treasurer|staff');
+    }
+
+    public function print($id)
+    {
+        $transaction = Transaction::where('transactions.id', $id)
+        ->join('vehicles', 'vehicles.id', 'transactions.vehicle_id')
+        ->join('members', 'members.id', 'transactions.member_id')
+        ->join('prices', 'prices.id', 'vehicles.price_id')
+        ->select([
+            'transactions.*',
+            'vehicles.plate_no',
+            'vehicles.brand',
+            'vehicles.brand_type',
+            'members.name',
+            'members.address',
+            'prices.price as pricePerDay'
+        ])
+        ->first();
+
+        $pdf = PDF::loadView('Transactions.invoice', [
+            'transaction' => $transaction,
+            'no' => 1
+        ])
+            ->setPaper('a5', 'portrait');
+
+        return $pdf->download('Invoice ' . $transaction->name . '.pdf');
     }
 
     /**

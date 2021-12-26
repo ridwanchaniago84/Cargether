@@ -44,4 +44,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('spendings', SpendingsController::class)->parameters(['spendings' => 'id'])->except(['show']);
 
     Route::post('spendings/print', [SpendingsController::class, 'print'])->name('print');
+    Route::get('transaction/{id}/print', [TransactionController::class, 'print'])->name('printTransaction');
 });
